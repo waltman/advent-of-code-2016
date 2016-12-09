@@ -6,6 +6,8 @@ use feature 'signatures';
 no warnings "experimental::signatures";
 
 # $/ = "";
+my $regex = qr/(.*?)\((\d+)x(\d+)\)(.*)/;
+
 while (my $line = <>) {
     chomp $line;
 #    s/\s//g;
@@ -19,7 +21,8 @@ while (my $line = <>) {
             say commify($n), ", ", commify($out_len), ", ", commify(length($line));
         }
 
-        if ($line =~ /(.*?)\((\d+)x(\d+)\)(.*)/) {
+#        if ($line =~ /(.*?)\((\d+)x(\d+)\)(.*)/) {
+        if ($line =~ $regex) {
 #            $out .= $1;
             $out_len += length($1);
 #            $out .= substr($4, 0, $2) x $3;
