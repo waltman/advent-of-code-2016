@@ -8,35 +8,27 @@ no warnings "experimental::signatures";
 my ($init, $len) = @ARGV;
 
 my $data = dragon($init, $len);
-#say $data;
 my $sum = checksum($data);
 say $sum;
 
 sub dragon($s, $len) {
     while (length($s) < $len) {
         $b = reverse($s);
-        $b =~ s/0/2/g;
-        $b =~ s/1/0/g;
-        $b =~ s/2/1/g;
+        $b =~ tr/01/10/;
         $s = $s . '0' . $b;
-        # say "s = $s";
     }
 
     return substr($s, 0, $len);
 }
 
-sub checksum($data) {
-    my $sum = $data;
+sub checksum($sum) {
+    my %h = ( '00' => '1',
+              '01' => '0',
+              '10' => '0',
+              '11' => '1');
+
     while (length($sum) % 2 == 0) {
-        # say "sum = $sum";
-        # say "length = " . length($sum);
-        my $tmp;
-        for (my $i = 0; $i < length($sum); $i += 2) {
-            my $c1 = substr($sum, $i, 1);
-            my $c2 = substr($sum, $i+1, 1);
-            $tmp .= $c1 == $c2 ? 1 : 0;
-        }
-        $sum = $tmp;
+        $sum =~ s/(..)/$h{$1}/eg;
     }
     return $sum;
 }
